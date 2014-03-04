@@ -75,7 +75,7 @@ void setBalance(){
   //delay another 5 seconds to allow the human to catch up to what is going on
   delay(5000);
   }
-
+//wsfsdfs
 void checkColour(){
     for(int i = 0;i<=2;i++){
      digitalWrite(ledArray[i],HIGH);  //turn or the LED, red, green or blue depending which iteration
