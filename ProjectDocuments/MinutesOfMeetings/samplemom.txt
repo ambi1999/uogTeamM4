@@ -1,1 +1,5 @@
 this is a sample minutes of meeting document.
+
+18/04/2014 -- Finished work on a protype interface using the SWT (Windowbuilder) interface plugin. 
+              
+              Next steps: Implement interface with Matts existing code.
