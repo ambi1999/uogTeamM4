@@ -1,111 +1,80 @@
-// LED pins
-int ledArray[] = {2,3,4};
-
-// boolean to know if the balance has been set
-boolean balanceSet = false;
-
-//place holders for colour
-//const int buttonPin = 4;
-int red = 0;
-int green = 0;
-int blue = 0;
-int buttonState = 0;
-
-float colourArray[] = {0,0,0};
-float whiteArray[] = {0,0,0};
-float blackArray[] = {0,0,0};
-
-
-
-int avgRead;
-
+int RedLed = 2;
+int GreenLed = 3;
+int BlueLed = 4;
+int RedSensor = A0;
+int GreenSensor = A1;
+int BlueSensor = A2;
+int Red = 0;
+int Green = 0;
+int Blue = 0;
+int WhiteRed = 0;
+int WhiteGreen = 0;
+int WhiteBlue = 0;
+int BlackRed = 0;
+int BlackGreen = 0;
+int BlackBlue = 0;
+boolean Calibrated = false;
 void setup(){
- 
-  //pinMode(buttonPin, INPUT);
-  pinMode(2,OUTPUT);
-  pinMode(3,OUTPUT);
-  pinMode(4,OUTPUT);
-  Serial.begin(9600);
- 
-}
-
+ pinMode(RedLed,OUTPUT);
+ pinMode(GreenLed,OUTPUT);
+ pinMode(BlueLed,OUTPUT);
+ Serial.begin(9600);
+  }
+  
 void loop(){
-   //buttonState = digitalRead(buttonPin);
-   //if (buttonState == HIGH) {  
-    checkBalance(); 
-    checkColour();
-    printColour();
-   //}
-      
-    }
-
-void checkBalance(){
+  if(Calibrated == false){
+    Calibrate();
+  }  
+Scan();
+}
+void Scan(){
+ digitalWrite(RedLed, HIGH); 
+ digitalWrite(GreenLed, HIGH);
+ digitalWrite(BlueLed, HIGH);
+ delay(1000);
+ digitalWrite(RedLed, LOW); 
+ digitalWrite(GreenLed, LOW);
+ digitalWrite(BlueLed, LOW);
+ Red = analogRead(RedSensor);
+ Green = analogRead(GreenSensor);
+ Blue = analogRead(BlueSensor);
+ Red=((Red-(WhiteRed-BlackRed))*255);
+ Green=((Green-(WhiteGreen-BlackGreen))*255);
+ Blue= ((Blue- (WhiteBlue-BlackGreen))*255);
+ Serial.print("R = ");
+ Serial.println(Red);
+ Serial.print("G = ");
+ Serial.println(Green);
+ Serial.print("B = ");
+ Serial.println(Blue); 
+  }
+void Calibrate(){
+ Serial.print("Calibrate White");
+ digitalWrite(RedLed, HIGH); 
+ digitalWrite(GreenLed, HIGH);
+ digitalWrite(BlueLed, HIGH);
+ delay(1000);
+ digitalWrite(RedLed, LOW); 
+ digitalWrite(GreenLed, LOW);
+ digitalWrite(BlueLed, LOW);
+ WhiteRed = analogRead(RedSensor);
+ WhiteGreen = analogRead(GreenSensor);
+ WhiteBlue = analogRead(BlueSensor);
+ delay(5000);
+ Serial.print("Calibrate Black");
+ digitalWrite(RedLed, HIGH); 
+ digitalWrite(GreenLed, HIGH);
+ digitalWrite(BlueLed, HIGH);
+ delay(1000);
+ digitalWrite(RedLed, LOW); 
+ digitalWrite(GreenLed, LOW);
+ digitalWrite(BlueLed, LOW);
+ BlackRed = analogRead(RedSensor);
+ BlackGreen = analogRead(GreenSensor);
+ BlackBlue = analogRead(BlueSensor); 
+ Calibrated = true;
+ loop();
+}
   
-  if(balanceSet == false){
-    setBalance();
-  }
-}
-
-void setBalance(){
-  //set white balance
-   delay(5000);                             
-  for(int i = 0;i<=2;i++){
-     digitalWrite(ledArray[i],HIGH);
-     delay(100);
-     getReading(5);         
-     whiteArray[i] = avgRead;
-     digitalWrite(ledArray[i],LOW);
-     delay(100);
-  }
-   //set black balance
-    delay(5000);             
-  for(int i = 0;i<=2;i++){
-     digitalWrite(ledArray[i],HIGH);
-     delay(100);
-     getReading(5);
-     blackArray[i] = avgRead;
-     //blackArray[i] = analogRead(2);
-     digitalWrite(ledArray[i],LOW);
-     delay(100);
-  }
-  balanceSet = true;
   
-  delay(5000);
-  }
-
-void checkColour(){
-    for(int i = 0;i<=2;i++){
-     digitalWrite(ledArray[i],HIGH);  
-     delay(100);                      
-     getReading(5);                  
-     colourArray[i] = avgRead;        
-     float greyDiff = whiteArray[i] - blackArray[i];                    
-     colourArray[i] = (colourArray[i] - blackArray[i])/(greyDiff)*255; 
-     digitalWrite(ledArray[i],LOW);   
-     delay(100);
-  }
-}
-void getReading(int times){
-  int reading;
-  int tally=0;
- 
-for(int i = 0;i < times;i++){
-   reading = analogRead(0);
-   tally = reading + tally;
-   delay(10);
-}
-
-avgRead = (tally)/times;
-}
-
-
-void printColour(){
-Serial.print("R = ");
-Serial.println(int(colourArray[0]));
-Serial.print("G = ");
-Serial.println(int(colourArray[1]));
-Serial.print("B = ");
-Serial.println(int(colourArray[2]));
-//delay(2000);
-}
-
+  
