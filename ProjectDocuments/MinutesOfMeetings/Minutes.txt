@@ -1,5 +1,8 @@
 this is a sample minutes of meeting document.
 
-18/04/2014 -- Finished work on a protype interface using the SWT (Windowbuilder) interface plugin. 
+18/03/2014 -- Finished work on a protype interface using the SWT (Windowbuilder) interface plugin. 
               
               Next steps: Implement interface with Matts existing code.
+              
+22/03/2014 -- Hopefully got the Arduino code to its final stage. Test it on Monday and then get it working with Jame's
+              interface. Going to look at it now so I have a understanding for Monday.
