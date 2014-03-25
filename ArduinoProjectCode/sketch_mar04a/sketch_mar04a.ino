@@ -19,13 +19,14 @@ void setup(){
   }
   
 void loop(){
-    
+  delay(5000);
   if(Calibrated == false){
     Calibrate();
   }  
-  Scan();
+ Scan();
+ delay(60000);
 }
-
+ 
 
   //comment
 void Scan(){
@@ -42,9 +43,16 @@ for(int i=0; i<3; i++){
  RGB[i] = analogRead(Sensors[i]);
  }
 delay(1000);
- for(int i=0; i<3; i++){
- RGB[i]= ((RGB[i]*(White[i]-Black[i]))*255);
- }
+for(int i=0; i<3; i++){
+   int range = White[i] - Black[i];
+   RGB[i] = (RGB[i] - Black[i])/(range * 255);
+   if (RGB[i]>255){
+   RGB[i]=255;
+   }
+   if (RGB[i]<0){
+   RGB[i]=0;
+   }
+  }
 // Serial.print("R = ");
  Serial.println(RGB[0]);
 // Serial.print("G = ");
@@ -66,7 +74,11 @@ for(int i=0; i<3; i++){
  digitalWrite(Leds[i], LOW); 
  White[i] = analogRead(Sensors[i]);
  }
- delay(5000);
+ 
+ for(int i=0; i<3; i++){
+ Serial.println(White[i]);
+ }
+ delay(10000);
  Serial.println("Calibrate Black");
  digitalWrite(Indicator[1],HIGH);
  for(int i=0; i<3; i++){
@@ -75,7 +87,11 @@ for(int i=0; i<3; i++){
  delay(1000);
 for(int i=0; i<3; i++){
  digitalWrite(Leds[i], LOW); 
- Black[i] = analogRead(i);
+ Black[i] = analogRead(Sensors[i]);
  }
+  for(int i=0; i<3; i++){
+ Serial.println(Black[i]);
+ }
+ delay(10000);
  Calibrated = true;
 }
