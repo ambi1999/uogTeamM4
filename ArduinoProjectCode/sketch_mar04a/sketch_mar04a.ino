@@ -1,80 +1,81 @@
-int RedLed = 2;
-int GreenLed = 3;
-int BlueLed = 4;
-int RedSensor = A0;
-int GreenSensor = A1;
-int BlueSensor = A2;
-int Red = 0;
-int Green = 0;
-int Blue = 0;
-int WhiteRed = 0;
-int WhiteGreen = 0;
-int WhiteBlue = 0;
-int BlackRed = 0;
-int BlackGreen = 0;
-int BlackBlue = 0;
+int Leds[3] = {7, 2, 3};
+int Indicator[3]={4, 5, 6};
+int Sensors[3] = {A2, A1, A0};
+int RGB[3] = {0, 0, 0};
+int White[3] = {0, 0, 0};
+int Black[3] = {0, 0, 0};
 boolean Calibrated = false;
 void setup(){
- pinMode(RedLed,OUTPUT);
- pinMode(GreenLed,OUTPUT);
- pinMode(BlueLed,OUTPUT);
+ 
+ pinMode(Leds[0],OUTPUT);
+ pinMode(Leds[1],OUTPUT);
+ pinMode(Leds[2],OUTPUT);
+ 
+ pinMode(Indicator[0],OUTPUT);
+ pinMode(Indicator[1],OUTPUT);
+ pinMode(Indicator[2],OUTPUT);
+  
  Serial.begin(9600);
   }
   
 void loop(){
+    
   if(Calibrated == false){
     Calibrate();
   }  
-Scan();
+  Scan();
 }
+
+
+  //comment
 void Scan(){
- digitalWrite(RedLed, HIGH); 
- digitalWrite(GreenLed, HIGH);
- digitalWrite(BlueLed, HIGH);
+ Serial.println("Scan Colour");
+ digitalWrite(Indicator[2],HIGH);
+ for(int i=0; i<3; i++){
+ digitalWrite(Leds[i], HIGH); 
+ }
  delay(1000);
- digitalWrite(RedLed, LOW); 
- digitalWrite(GreenLed, LOW);
- digitalWrite(BlueLed, LOW);
- Red = analogRead(RedSensor);
- Green = analogRead(GreenSensor);
- Blue = analogRead(BlueSensor);
- Red=((Red-(WhiteRed-BlackRed))*255);
- Green=((Green-(WhiteGreen-BlackGreen))*255);
- Blue= ((Blue- (WhiteBlue-BlackGreen))*255);
- Serial.print("R = ");
- Serial.println(Red);
- Serial.print("G = ");
- Serial.println(Green);
- Serial.print("B = ");
- Serial.println(Blue); 
+for(int i=0; i<3; i++){
+ digitalWrite(Leds[i], LOW); 
+ }
+for(int i=0; i<3; i++){
+ RGB[i] = analogRead(Sensors[i]);
+ }
+delay(1000);
+ for(int i=0; i<3; i++){
+ RGB[i]= ((RGB[i]*(White[i]-Black[i]))*255);
+ }
+// Serial.print("R = ");
+ Serial.println(RGB[0]);
+// Serial.print("G = ");
+ Serial.println(RGB[1]);
+ //Serial.print("B = ");
+ Serial.println(RGB[2]); 
+ //Serial.println("Colour scanned");
   }
+  
+  //this function is doing xyz
 void Calibrate(){
- Serial.print("Calibrate White");
- digitalWrite(RedLed, HIGH); 
- digitalWrite(GreenLed, HIGH);
- digitalWrite(BlueLed, HIGH);
+ Serial.println("Calibrate White");
+ digitalWrite(Indicator[0],HIGH);
+  for(int i=0; i<3; i++){
+ digitalWrite(Leds[i], HIGH); 
+ }
  delay(1000);
- digitalWrite(RedLed, LOW); 
- digitalWrite(GreenLed, LOW);
- digitalWrite(BlueLed, LOW);
- WhiteRed = analogRead(RedSensor);
- WhiteGreen = analogRead(GreenSensor);
- WhiteBlue = analogRead(BlueSensor);
+for(int i=0; i<3; i++){
+ digitalWrite(Leds[i], LOW); 
+ White[i] = analogRead(Sensors[i]);
+ }
  delay(5000);
- Serial.print("Calibrate Black");
- digitalWrite(RedLed, HIGH); 
- digitalWrite(GreenLed, HIGH);
- digitalWrite(BlueLed, HIGH);
+ Serial.println("Calibrate Black");
+ digitalWrite(Indicator[1],HIGH);
+ for(int i=0; i<3; i++){
+ digitalWrite(Leds[i], HIGH); 
+ }
  delay(1000);
- digitalWrite(RedLed, LOW); 
- digitalWrite(GreenLed, LOW);
- digitalWrite(BlueLed, LOW);
- BlackRed = analogRead(RedSensor);
- BlackGreen = analogRead(GreenSensor);
- BlackBlue = analogRead(BlueSensor); 
+for(int i=0; i<3; i++){
+ digitalWrite(Leds[i], LOW); 
+ Black[i] = analogRead(i);
+ }
  Calibrated = true;
- loop();
 }
-  
-  
-  
