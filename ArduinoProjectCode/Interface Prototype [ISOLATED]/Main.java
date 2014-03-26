@@ -4,7 +4,7 @@ import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.List;
 import org.eclipse.swt.widgets.Label;
-import org.eclipse.swt.widgets.Text;
+import org.eclipse.swt.widgets.Text;	 		//imported special files for the use of swing in my GUI 
 import org.eclipse.swt.widgets.Canvas;
 import org.eclipse.wb.swt.SWTResourceManager;
 import org.eclipse.swt.widgets.Composite;
@@ -17,31 +17,25 @@ public class Main {
 
 	protected Shell shlColourPicker;
 	private Text text;
-	private Text text_1;
-	private Text text_2;
+	private Text text_1;			
+	private Text text_2;					//Private used to hide code from other classes
 	private Text txtCalibrating;
 	private final FormToolkit formToolkit = new FormToolkit(Display.getDefault());
 
-	/**
-	 * Launch the application.
-	 * @param args
-	 */
+
 	public static void main(String[] args) {
 		try {
 			Main window = new Main();
-			window.open();
+			window.open();				//Main instruction starts application
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
 
-	/**
-	 * Open the window.
-	 */
 	public void open() {
 		Display display = Display.getDefault();
 		createContents();
-		shlColourPicker.open();
+		shlColourPicker.open();				//draws the window 
 		shlColourPicker.layout();
 		while (!shlColourPicker.isDisposed()) {
 			if (!display.readAndDispatch()) {
@@ -50,15 +44,12 @@ public class Main {
 		}
 	}
 
-	/**
-	 * Create contents of the window.
-	 */
-	protected void createContents() {
+	protected void createContents() {                            //this section creates the contents of the window
 		shlColourPicker = new Shell();
 		shlColourPicker.setSize(285, 172);
 		shlColourPicker.setText("#Scan\r\n");
 		
-		Label label = new Label(shlColourPicker, SWT.NONE);
+		Label label = new Label(shlColourPicker, SWT.NONE);		
 		label.setText("Red");
 		label.setBounds(10, 13, 45, 15);
 		
